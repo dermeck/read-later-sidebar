@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "version": "0.1",
+  "name": "Read Later",
+
+  "icons": {
+    "48": "tool.svg"
+  },
+
+  "permissions": ["tabs", "activeTab"],
+
+  "sidebar_action": {
+    "default_title": "Read Later",
+    "default_panel": "sidebar/sidebar.html",
+    "default_icon": "tool.svg"
+  }
+}
