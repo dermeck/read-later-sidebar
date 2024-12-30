@@ -8,7 +8,7 @@
     "url": "https://github.com/dermeck"
   },
   "icons": {
-    "48": "tool.svg"
+    "48": "icon.svg"
   },
 
   "permissions": ["storage"],
@@ -21,11 +21,11 @@
   "sidebar_action": {
     "default_title": "Read Later",
     "default_panel": "sidebar/sidebar.html",
-    "default_icon": "tool.svg"
+    "default_icon": "icon.svg"
   },
 
   "action": {
-    "default_icon": "tool.svg",
+    "default_icon": "icon.svg",
     "default_title": "Read Later"
   }
 }
