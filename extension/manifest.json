@@ -1,17 +1,31 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "version": "0.1",
   "name": "Read Later",
-
+  "description": "A place to store temporary bookmarks.",
+  "developer": {
+    "name": "dermeck",
+    "url": "https://github.com/dermeck"
+  },
   "icons": {
     "48": "tool.svg"
   },
 
-  "permissions": ["tabs", "activeTab"],
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+
+  "background": {
+    "scripts": ["background/background.js"]
+  },
 
   "sidebar_action": {
     "default_title": "Read Later",
     "default_panel": "sidebar/sidebar.html",
     "default_icon": "tool.svg"
+  },
+
+  "action": {
+    "default_icon": "tool.svg",
+    "default_title": "Read Later"
   }
 }

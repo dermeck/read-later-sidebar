@@ -1,1 +1,3 @@
-# read-later-sidebar
+# Read Later Sidebar
+
+A place to store temporary bookmarks.
