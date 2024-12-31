@@ -9,36 +9,16 @@ class ListItem extends HTMLElement {
     this.render(data);
   }
 
-  // TODO mr extract css
   render(data) {
     this.shadowRoot.innerHTML = `
-                <style>
-                    div {
-                        background-color: #f4f4f4;
-                        margin: 5px;
-                        padding: 10px;
-                        border-radius: 4px;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                    }
-                    button {
-                        background-color: red;
-                        color: white;
-                        border: none;
-                        padding: 5px 10px;
-                        cursor: pointer;
-                        border-radius: 4px;
-                    }
-                    button:hover {
-                        background-color: darkred;
-                    }
-                </style>
-                <div>
-                    <span>${data}</span>
-                    <button id="delete-button">Delete</button>
-                </div>
-            `;
+      <style>
+          @import "./components/list/item/list-item.css";
+      </style>
+      <div>
+          <span>${data}</span>
+          <button id="delete-button">Delete</button>
+      </div>
+  `;
 
     // Add event listener for delete button
     this.shadowRoot

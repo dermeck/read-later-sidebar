@@ -15,24 +15,13 @@ class App extends HTMLElement {
   }
 
   render() {
-    // TODO mr extract css
     this.shadowRoot.innerHTML = `
-                <style>
-                    button {
-                        background-color: green;
-                        color: white;
-                        border: none;
-                        padding: 5px 10px;
-                        cursor: pointer;
-                        border-radius: 4px;
-                    }
-                    button:hover {
-                        background-color: darkgreen;
-                    }
-                </style>
-                <list-component id="list"></list-component>
-                <button id="add-item">Add Item</button>
-            `;
+    <style>
+      @import "./components/app.css";
+    </style>
+    <list-component id="list"></list-component>
+    <button id="add-item">Add Item</button>
+  `;
   }
 
   addEventListeners() {
