@@ -7,20 +7,27 @@ class App extends HTMLElement {
     this.items = ["Item 1", "Item 2", "Item 3"];
   }
 
-  // TODO mr interact with bookmarks api
+  // TODO mr: interact with bookmarks api
   connectedCallback() {
     this.render();
     this.addEventListeners();
     this.updateList();
   }
 
+  // TODO mr: implement button actions; either show add item or mark item button
   render() {
     this.shadowRoot.innerHTML = `
     <style>
       @import "./components/app.css";
     </style>
-    <list-component id="list"></list-component>
-    <button id="add-item">Add Item</button>
+    <header>
+      <input type="text" class="filter-input" />
+    </header>
+    <main>
+      <button id="add-item" class="button add-item-button">Add current tab</button>
+     <!-- <button id="mark-item" class="button mark-item-button">Mark current tab as read</button> -->
+      <list-component id="list"></list-component>
+    </main>
   `;
   }
 

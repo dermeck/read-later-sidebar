@@ -1,0 +1,22 @@
+:host {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  color: light-dark(#222426, CanvasText);
+  font: caption;
+  margin: 0;
+  user-select: none;
+
+  background-color: var(--sidebar-background-color);
+  color: var(--sidebar-text-color);
+}
+
+:host * {
+  box-sizing: border-box;
+}
+
+.item-list {
+  padding-left: 0;
+  margin: 0;
+  opacity: 0.9;
+}

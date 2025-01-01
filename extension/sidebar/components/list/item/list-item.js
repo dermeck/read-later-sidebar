@@ -10,17 +10,22 @@ class ListItem extends HTMLElement {
   }
 
   render(data) {
-    this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = /* html */ `
       <style>
           @import "./components/list/item/list-item.css";
       </style>
-      <div>
-          <span>${data}</span>
-          <button id="delete-button">Delete</button>
-      </div>
+      <li class="list-item">
+        <div class="list-item__grid">
+          <!-- TODO mr: add icon or color cat -->
+          <i>i</i>
+          <!-- TODO mr: add click effect (color change) + open link -->
+          <a class="list-item__link" href="#">${data}</a>
+          <!-- TODO mr: add x icon -->
+          <button id="delete-button" class="button list-item__remove-button">x</button>
+        </div>
+      </li>
   `;
 
-    // Add event listener for delete button
     this.shadowRoot
       .querySelector("#delete-button")
       .addEventListener("click", () => {

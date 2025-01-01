@@ -22,8 +22,11 @@ class List extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
-                  <ul id="list-container"></ul>
-              `;
+      <style>
+        @import "./components/list/list.css";
+      </style>
+      <ul id="list-container" class="item-list"></ul>
+  `;
   }
 
   updateList(items) {
