@@ -18,9 +18,9 @@
 
 header {
   display: flex;
+  flex-direction: column;
   align-items: center;
   height: var(--header-height);
-  padding: 0px 8px;
   color: var(--toolbar-text-color);
   background-color: var(--toolbar-background-color);
 }
@@ -31,6 +31,11 @@ main {
   position: relative;
   height: calc(100vh - var(--header-height));
   overflow-x: scroll;
+}
+
+.header-topbar {
+  width: 100%;
+  padding: 8px;
 }
 
 .filter-input {
@@ -44,9 +49,11 @@ main {
 .add-item-button,
 .mark-item-button {
   width: 100%;
+  align-self: flex-end;
 }
 
 .button {
+  height: var(--control-height);
   border: none;
   background-color: var(--button-background-color);
   color: var(--button-text-color);

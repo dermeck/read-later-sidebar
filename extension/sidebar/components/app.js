@@ -21,11 +21,13 @@ class App extends HTMLElement {
       @import "./components/app.css";
     </style>
     <header>
-      <input type="text" class="filter-input" />
-    </header>
-    <main>
+      <div class="header-topbar">
+        <input type="text" class="filter-input" />
+      </div>
       <button id="add-item" class="button add-item-button">Add current tab</button>
      <!-- <button id="mark-item" class="button mark-item-button">Mark current tab as read</button> -->
+    </header>
+    <main>
       <list-component id="list"></list-component>
     </main>
   `;

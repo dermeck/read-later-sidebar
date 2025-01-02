@@ -41,7 +41,7 @@
   --message-background-color: -moz-Dialog;
   --message-text-color: -moz-DialogText;
 
-  --header-height: 48px;
+  --header-height: 80px; /*input + padding (48px;) + button height (control height) */
   --control-height: 32px;
   --menu-width: 200px;
   --scrollbar-background-width: 12px;
