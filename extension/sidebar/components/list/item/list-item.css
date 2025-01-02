@@ -15,6 +15,7 @@
   box-sizing: border-box;
 }
 
+/* TODO mr: increase height to 32px / adapt to history view ? */
 .list-item {
   padding-left: 20px;
   padding-right: 8px; /* TODO mr: work with scrollbar spacer div instead? */

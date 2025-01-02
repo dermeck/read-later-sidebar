@@ -35,7 +35,7 @@ class List extends HTMLElement {
 
     items.forEach((item) => {
       const listItem = document.createElement("list-item");
-      listItem.setAttribute("data", item);
+      listItem.setAttribute("data", JSON.stringify(item));
       // TODO mr teardown? => move into item?
       listItem.addEventListener("delete-item", () =>
         this.dispatchEvent(

@@ -1,66 +1,68 @@
 import "./list/list.js";
 
 const dummyItems = [
-  "Item 1",
-  "Item 2",
-  "Item 3",
-  "Item 4",
-  "Item 5",
-  "Item 6",
-  "Item 7",
-  "Item 8",
-  "Item 9",
-  "Item 10",
-  "Item 11",
-  "Item 12",
-  "Item 13",
-  "Item 14",
-  "Item 15",
-  "Item 16",
-  "Item 17",
-  "Item 18",
-  "Item 19",
-  "Item 20",
-  "Item 21",
-  "Item 22",
-  "Item 23",
-  "Item 24",
-  "Item 25",
-  "Item 26",
-  "Item 27",
-  "Item 28",
-  "Item 29",
-  "Item 30",
-  "Item 31",
-  "Item 32",
-  "Item 33",
-  "Item 34",
-  "Item 35",
-  "Item 36",
-  "Item 37",
-  "Item 38",
-  "Item 39",
-  "Item 40",
-  "Item 41",
-  "Item 42",
-  "Item 43",
-  "Item 44",
-  "Item 45",
-  "Item 46",
-  "Item 47",
-  "Item 48",
-  "Item 49",
-  "Item 50",
-  "Item 51",
-  "Item 52",
-  "Item 53",
-  "Item 54",
-  "Item 55",
-  "Item 56",
-  "Item 57",
-  "Item 58",
-  "Item 59",
+  { title: "Item 1" },
+  { title: "Item 2" },
+  { title: "Item 3" },
+  { title: "Item 4" },
+  { title: "Item 5" },
+  { title: "Item 6" },
+  { title: "Item 7" },
+  { title: "Item 8" },
+  { title: "Item 9" },
+  { title: "Item 10" },
+  { title: "Item 11" },
+  { title: "Item 12" },
+  { title: "Item 13" },
+  { title: "Item 14" },
+  { title: "Item 15" },
+  { title: "Item 16" },
+  { title: "Item 17" },
+  { title: "Item 18" },
+  { title: "Item 19" },
+  { title: "Item 20" },
+  { title: "Item 21" },
+  { title: "Item 22" },
+  { title: "Item 23" },
+  { title: "Item 24" },
+  { title: "Item 25" },
+  { title: "Item 26" },
+  { title: "Item 27" },
+  { title: "Item 28" },
+  { title: "Item 29" },
+  { title: "Item 30" },
+  { title: "Item 31" },
+  { title: "Item 32" },
+  { title: "Item 33" },
+  { title: "Item 34" },
+  { title: "Item 35" },
+  { title: "Item 36" },
+  { title: "Item 37" },
+  { title: "Item 38" },
+  { title: "Item 39" },
+  { title: "Item 40" },
+  { title: "Item 41" },
+  { title: "Item 42" },
+  { title: "Item 43" },
+  { title: "Item 44" },
+  { title: "Item 45" },
+  { title: "Item 46" },
+  { title: "Item 47" },
+  { title: "Item 48" },
+  { title: "Item 49" },
+  { title: "Item 50" },
+  { title: "Item 51" },
+  { title: "Item 52" },
+  { title: "Item 53" },
+  { title: "Item 54" },
+  { title: "Item 55" },
+  { title: "Item 56" },
+  { title: "Item 57" },
+  { title: "Item 58" },
+  { title: "Item 59" },
 ];
+
+const readLaterBookmarksFolderTitle = "Read Later Sidebar";
 
 class App extends HTMLElement {
   constructor() {
@@ -69,16 +71,52 @@ class App extends HTMLElement {
     this.items = dummyItems;
   }
 
-  // TODO mr: interact with bookmarks api
-  connectedCallback() {
+  async connectedCallback() {
+    // TODO mr: notify backgroundscript that we're ready
     this.render();
     this.addEventListeners();
+    browser.runtime.onMessage.addListener((message) => {
+      console.log("message", message); // TODO
+    });
+
+    const readLaterBookmarksFolder = (
+      await browser.bookmarks.search({
+        title: readLaterBookmarksFolderTitle,
+      })
+    ).filter((x) => x.type === "folder");
+
+    if (readLaterBookmarksFolder.length > 0) {
+      const id = readLaterBookmarksFolder[0].id;
+      this.readLaterBookmarksFolderId = id;
+    } else {
+      // folder does not yet exist
+      const createdFolder = await browser.bookmarks.create({
+        title: readLaterBookmarksFolderTitle,
+      });
+      this.readLaterBookmarksFolderId = createdFolder.id;
+    }
+
+    const readLaterBookmarksTree = await browser.bookmarks.getSubTree(
+      this.readLaterBookmarksFolderId
+    );
+
+    if (
+      readLaterBookmarksTree.length > 0 &&
+      readLaterBookmarksTree[0].children
+    ) {
+      // sub folders are ignored
+      this.items = readLaterBookmarksTree[0].children.filter(
+        (x) => x.type === "bookmark"
+      );
+      // this.items = dummyItems; // TODO mr remove
+    }
+
     this.updateList();
   }
 
   // TODO mr: implement button actions; either show add item or mark item button
   render() {
-    this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = /* html */ `
     <style>
       @import "./components/app.css";
     </style>
@@ -105,6 +143,7 @@ class App extends HTMLElement {
   }
 
   addItem() {
+    // TODO mr: add current tab if not already added
     const newItem = `Item ${this.items.length + 1}`;
     this.items.push(newItem);
     this.updateList();
