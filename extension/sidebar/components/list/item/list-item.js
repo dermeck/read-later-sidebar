@@ -17,7 +17,7 @@ class ListItem extends HTMLElement {
       <li class="list-item">
         <div class="list-item__grid">
           <!-- TODO mr: add icon or color cat -->
-          <i>i</i>
+          <i></i>
           <!-- TODO mr: add click effect (color change) + open link -->
           <a class="list-item__link" href="#">${data}</a>
           <!-- TODO mr: add x icon -->

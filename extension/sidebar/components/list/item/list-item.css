@@ -17,6 +17,7 @@
 
 .list-item {
   padding-left: 20px;
+  padding-right: 8px; /* TODO mr: work with scrollbar spacer div instead? */
   list-style: none;
 }
 
