@@ -17,12 +17,25 @@ class ListItem extends HTMLElement {
       </style>
       <li class="list-item">
         <div class="list-item__grid">
-          <!-- TODO mr: add icon or color cat -->
+          <!-- TODO mr: add icon or color cat? -->
           <i></i>
-          <!-- TODO mr: add click effect (color change) + open link -->
-          <a class="list-item__link" href=${data.url}>${data.title}</a> <!-- JSON string blabla-->
-          <!-- TODO mr: add x icon -->
-          <button id="delete-button" class="button list-item__remove-button">x</button>
+          <a class="list-item__link" href=${data.url}>${data.title}</a>          
+          <button id="delete-button" class="button list-item__remove-button">
+            <!-- https://phosphoricons.com/?q=%22trash -->
+            <!-- keep the svg inline so that css color is applied -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                <rect width="256" height="256" fill="none" />
+                  <line x1="216" y1="56" x2="40" y2="56" fill="none" stroke="currentColor" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="16" />
+                <line x1="104" y1="104" x2="104" y2="168" fill="none" stroke="currentColor"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                <line x1="152" y1="104" x2="152" y2="168" fill="none" stroke="currentColor"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                <path d="M200,56V208a8,8,0,0,1-8,8H64a8,8,0,0,1-8-8V56" fill="none" stroke="currentColor"
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                <path d="M168,56V40a16,16,0,0,0-16-16H104A16,16,0,0,0,88,40V56" fill="none"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+            </svg>
         </div>
       </li>
   `;

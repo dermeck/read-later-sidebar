@@ -11,5 +11,8 @@
         ]
       }
     ]
-  }
+  },
+  "browserslist": [
+    "firefox >= 133"
+  ]
 }
