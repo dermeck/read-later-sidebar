@@ -5,9 +5,8 @@ class ListItem extends HTMLElement {
   }
 
   connectedCallback() {
-    const data = this.getAttribute("data") || "Default Content";
-    console.log("data", JSON.parse(data)); // TODO
-    this.render(JSON.parse(data));
+    this.data = JSON.parse(this.getAttribute("data"));
+    this.render(this.data);
   }
 
   render(data) {
@@ -45,8 +44,9 @@ class ListItem extends HTMLElement {
       .addEventListener("click", () => {
         this.dispatchEvent(
           new CustomEvent("delete-item", {
-            bubbles: true,
+            bubbles: false,
             composed: true,
+            detail: this.data,
           })
         );
       });
