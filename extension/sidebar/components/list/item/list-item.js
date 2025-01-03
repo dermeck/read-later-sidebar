@@ -20,7 +20,7 @@ class ListItem extends HTMLElement {
           <!-- TODO mr: add icon or color cat -->
           <i></i>
           <!-- TODO mr: add click effect (color change) + open link -->
-          <a class="list-item__link" href="#">${data.title}</a> <!-- JSON string blabla-->
+          <a class="list-item__link" href=${data.url}>${data.title}</a> <!-- JSON string blabla-->
           <!-- TODO mr: add x icon -->
           <button id="delete-button" class="button list-item__remove-button">x</button>
         </div>
