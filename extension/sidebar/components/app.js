@@ -96,21 +96,6 @@ class App extends HTMLElement {
       this.readLaterBookmarksFolderId = createdFolder.id;
     }
 
-    const readLaterBookmarksTree = await browser.bookmarks.getSubTree(
-      this.readLaterBookmarksFolderId
-    );
-
-    if (
-      readLaterBookmarksTree.length > 0 &&
-      readLaterBookmarksTree[0].children
-    ) {
-      // sub folders are ignored
-      this.items = readLaterBookmarksTree[0].children.filter(
-        (x) => x.type === "bookmark"
-      );
-      // this.items = dummyItems; // TODO mr remove
-    }
-
     this.updateList();
   }
 
@@ -139,7 +124,7 @@ class App extends HTMLElement {
       .addEventListener("click", () => this.addItem());
     this.shadowRoot
       .querySelector("list-component")
-      .addEventListener("delete-item", (e) => this.removeItem(e.detail));
+      .addEventListener("delete-item", this.handleDeleteItem);
   }
 
   addItem() {
@@ -149,12 +134,28 @@ class App extends HTMLElement {
     this.updateList();
   }
 
-  removeItem(item) {
-    this.items = this.items.filter((existingItem) => existingItem !== item);
+  async handleDeleteItem(event) {
+    const bookmark = event.detail;
+    await browser.bookmarks.remove(bookmark.id);
     this.updateList();
   }
 
-  updateList() {
+  async updateList() {
+    const readLaterBookmarksTree = await browser.bookmarks.getSubTree(
+      this.readLaterBookmarksFolderId
+    );
+
+    if (
+      readLaterBookmarksTree.length > 0 &&
+      readLaterBookmarksTree[0].children
+    ) {
+      // sub folders are ignored
+      this.items = readLaterBookmarksTree[0].children.filter(
+        (x) => x.type === "bookmark"
+      );
+      // this.items = dummyItems; // TODO mr remove
+    }
+
     const listComponent = this.shadowRoot.querySelector("list-component");
     listComponent.setAttribute("items", JSON.stringify(this.items));
   }
