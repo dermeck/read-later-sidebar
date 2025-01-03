@@ -1,74 +1,11 @@
 import "./list/list.js";
 
-const dummyItems = [
-  { title: "Item 1" },
-  { title: "Item 2" },
-  { title: "Item 3" },
-  { title: "Item 4" },
-  { title: "Item 5" },
-  { title: "Item 6" },
-  { title: "Item 7" },
-  { title: "Item 8" },
-  { title: "Item 9" },
-  { title: "Item 10" },
-  { title: "Item 11" },
-  { title: "Item 12" },
-  { title: "Item 13" },
-  { title: "Item 14" },
-  { title: "Item 15" },
-  { title: "Item 16" },
-  { title: "Item 17" },
-  { title: "Item 18" },
-  { title: "Item 19" },
-  { title: "Item 20" },
-  { title: "Item 21" },
-  { title: "Item 22" },
-  { title: "Item 23" },
-  { title: "Item 24" },
-  { title: "Item 25" },
-  { title: "Item 26" },
-  { title: "Item 27" },
-  { title: "Item 28" },
-  { title: "Item 29" },
-  { title: "Item 30" },
-  { title: "Item 31" },
-  { title: "Item 32" },
-  { title: "Item 33" },
-  { title: "Item 34" },
-  { title: "Item 35" },
-  { title: "Item 36" },
-  { title: "Item 37" },
-  { title: "Item 38" },
-  { title: "Item 39" },
-  { title: "Item 40" },
-  { title: "Item 41" },
-  { title: "Item 42" },
-  { title: "Item 43" },
-  { title: "Item 44" },
-  { title: "Item 45" },
-  { title: "Item 46" },
-  { title: "Item 47" },
-  { title: "Item 48" },
-  { title: "Item 49" },
-  { title: "Item 50" },
-  { title: "Item 51" },
-  { title: "Item 52" },
-  { title: "Item 53" },
-  { title: "Item 54" },
-  { title: "Item 55" },
-  { title: "Item 56" },
-  { title: "Item 57" },
-  { title: "Item 58" },
-  { title: "Item 59" },
-];
-
 const readLaterBookmarksFolderTitle = "Read Later Sidebar";
 
 class App extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.items = dummyItems;
   }
 
   async connectedCallback() {
@@ -121,17 +58,33 @@ class App extends HTMLElement {
   addEventListeners() {
     this.shadowRoot
       .querySelector("#add-item")
-      .addEventListener("click", () => this.addItem());
+      .addEventListener("click", () => this.handleAddItem());
     this.shadowRoot
       .querySelector("list-component")
-      .addEventListener("delete-item", this.handleDeleteItem);
+      .addEventListener("delete-item", (e) => this.handleDeleteItem(e));
   }
 
-  addItem() {
-    // TODO mr: add current tab if not already added
-    const newItem = `Item ${this.items.length + 1}`;
-    this.items.push(newItem);
-    this.updateList();
+  async handleAddItem() {
+    const currentTab = await browser.tabs
+      .query({ active: true, windowId: browser.windows.WINDOW_ID_CURRENT })
+      .then((tabs) => browser.tabs.get(tabs[0].id));
+
+    const searchResult = await browser.bookmarks.search({
+      url: currentTab.url,
+    });
+
+    if (searchResult.length > 0) {
+      if (searchResult[0].parentId === this.readLaterBookmarksFolderId) {
+        // bookmark already exists in our folder
+      }
+    } else {
+      await browser.bookmarks.create({
+        parentId: this.readLaterBookmarksFolderId,
+        title: currentTab.title,
+        url: currentTab.url,
+      });
+      this.updateList();
+    }
   }
 
   async handleDeleteItem(event) {
@@ -153,7 +106,6 @@ class App extends HTMLElement {
       this.items = readLaterBookmarksTree[0].children.filter(
         (x) => x.type === "bookmark"
       );
-      // this.items = dummyItems; // TODO mr remove
     }
 
     const listComponent = this.shadowRoot.querySelector("list-component");

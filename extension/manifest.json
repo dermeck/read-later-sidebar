@@ -11,7 +11,7 @@
     "48": "icon.svg"
   },
 
-  "permissions": ["storage", "bookmarks"],
+  "permissions": ["storage", "bookmarks", "tabs"],
   "host_permissions": ["<all_urls>"],
 
   "background": {
