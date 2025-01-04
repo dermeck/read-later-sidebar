@@ -6,6 +6,7 @@ class App extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.filterString = "";
   }
 
   async connectedCallback() {
@@ -44,9 +45,11 @@ class App extends HTMLElement {
     </style>
     <header>
       <div class="header-topbar">
-        <input type="text" class="filter-input" />
+        <!-- TODO mr: make input clearable -->
+        <input id="filter-input" type="text" class="filter-input" />
       </div>
       <button id="add-item" class="button add-item-button">Add current tab</button>
+     <!-- TODO mr: mark as read --> 
      <!-- <button id="mark-item" class="button mark-item-button">Mark current tab as read</button> -->
     </header>
     <main>
@@ -57,11 +60,22 @@ class App extends HTMLElement {
 
   addEventListeners() {
     this.shadowRoot
+      .querySelector("#filter-input")
+      .addEventListener("input", () => this.handleFilterChange());
+    this.shadowRoot
       .querySelector("#add-item")
       .addEventListener("click", () => this.handleAddItem());
     this.shadowRoot
       .querySelector("list-component")
       .addEventListener("delete-item", (e) => this.handleDeleteItem(e));
+  }
+
+  handleFilterChange() {
+    this.filterString = this.shadowRoot
+      .querySelector("#filter-input")
+      .value.toLowerCase();
+
+    this.updateList();
   }
 
   async handleAddItem() {
@@ -76,6 +90,8 @@ class App extends HTMLElement {
     if (searchResult.length > 0) {
       if (searchResult[0].parentId === this.readLaterBookmarksFolderId) {
         // bookmark already exists in our folder
+      } else {
+        // TODO mr: bookmark exists in another folder => move it?
       }
     } else {
       await browser.bookmarks.create({
@@ -102,9 +118,12 @@ class App extends HTMLElement {
       readLaterBookmarksTree.length > 0 &&
       readLaterBookmarksTree[0].children
     ) {
-      // sub folders are ignored
       this.items = readLaterBookmarksTree[0].children.filter(
-        (x) => x.type === "bookmark"
+        (x) =>
+          // sub folders are ignored
+          x.type === "bookmark" &&
+          (x.title.toLowerCase().includes(this.filterString) ||
+            x.url.toLowerCase().includes(this.filterString))
       );
     }
 
