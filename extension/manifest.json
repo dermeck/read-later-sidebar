@@ -7,6 +7,12 @@
     "name": "dermeck",
     "url": "https://github.com/dermeck"
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{67e27d87-fdaa-4b62-9c2d-cf0e8d1c1ea3}",
+      "strict_min_version": "132.0"
+    }
+  },
   "icons": {
     "48": "icon.svg"
   },
