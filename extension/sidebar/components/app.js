@@ -42,6 +42,10 @@ class App extends HTMLElement {
     this.updateList();
   }
 
+  disconnectedCallback() {
+    this.removeEventListeners();
+  }
+
   // TODO mr: implement button actions; either show add item or mark item button
   render() {
     this.shadowRoot.innerHTML = /* html */ `
@@ -73,6 +77,18 @@ class App extends HTMLElement {
     this.shadowRoot
       .querySelector("list-component")
       .addEventListener("delete-item", (e) => this.handleDeleteItem(e));
+
+    browser.bookmarks.onCreated.addListener(() => this.updateList());
+    browser.bookmarks.onChanged.addListener(() => this.updateList());
+    browser.bookmarks.onMoved.addListener(() => this.updateList());
+    browser.bookmarks.onRemoved.addListener(() => this.updateList());
+  }
+
+  removeEventListeners() {
+    browser.bookmarks.onCreated.removeEventListener(() => this.updateList());
+    browser.bookmarks.onChanged.removeEventListener(() => this.updateList());
+    browser.bookmarks.onMoved.removeEventListener(() => this.updateList());
+    browser.bookmarks.onRemoved.removeEventListener(() => this.updateList());
   }
 
   handleFilterChange() {
