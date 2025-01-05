@@ -99,24 +99,32 @@ class App extends HTMLElement {
       : [];
   }
 
+  async addTabAsBookmark(tab) {
+    await browser.bookmarks.create({
+      parentId: this.readLaterBookmarksFolderId,
+      title: tab.title,
+      url: tab.url,
+    });
+    this.updateList();
+  }
+
   async handleAddItem() {
     const currentTab = await this.getCurrentTab();
     const searchResult = await this.searchBookmark(currentTab);
 
     if (searchResult.length) {
+      // TODO mr: handle case where link is bookmarked multiple times
       if (searchResult[0].parentId === this.readLaterBookmarksFolderId) {
         // bookmark already exists in our folder
       } else {
-        // TODO mr: bookmark exists in another folder => move it?
+        if (window.confirm('Move existing bookmark to "Read Later" folder?')) {
+          browser.bookmarks.remove(searchResult[0].id);
+          await this.addTabAsBookmark(currentTab);
+        }
       }
     } else {
       if (isValidHttpUrl(currentTab.url)) {
-        await browser.bookmarks.create({
-          parentId: this.readLaterBookmarksFolderId,
-          title: currentTab.title,
-          url: currentTab.url,
-        });
-        this.updateList();
+        await this.addTabAsBookmark(currentTab);
       }
     }
   }
