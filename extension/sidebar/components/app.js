@@ -2,6 +2,11 @@ import "./list/list.js";
 
 const readLaterBookmarksFolderTitle = "Read Later Sidebar";
 
+function isValidHttpUrl(string) {
+  const regex = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+  return regex.test(string);
+}
+
 class App extends HTMLElement {
   constructor() {
     super();
@@ -78,28 +83,41 @@ class App extends HTMLElement {
     this.updateList();
   }
 
-  async handleAddItem() {
+  async getCurrentTab() {
     const currentTab = await browser.tabs
       .query({ active: true, windowId: browser.windows.WINDOW_ID_CURRENT })
       .then((tabs) => browser.tabs.get(tabs[0].id));
 
-    const searchResult = await browser.bookmarks.search({
-      url: currentTab.url,
-    });
+    return currentTab;
+  }
 
-    if (searchResult.length > 0) {
+  async searchBookmark(tab) {
+    return isValidHttpUrl(tab.url)
+      ? await browser.bookmarks.search({
+          url: tab.url,
+        })
+      : [];
+  }
+
+  async handleAddItem() {
+    const currentTab = await this.getCurrentTab();
+    const searchResult = await this.searchBookmark(currentTab);
+
+    if (searchResult.length) {
       if (searchResult[0].parentId === this.readLaterBookmarksFolderId) {
         // bookmark already exists in our folder
       } else {
         // TODO mr: bookmark exists in another folder => move it?
       }
     } else {
-      await browser.bookmarks.create({
-        parentId: this.readLaterBookmarksFolderId,
-        title: currentTab.title,
-        url: currentTab.url,
-      });
-      this.updateList();
+      if (isValidHttpUrl(currentTab.url)) {
+        await browser.bookmarks.create({
+          parentId: this.readLaterBookmarksFolderId,
+          title: currentTab.title,
+          url: currentTab.url,
+        });
+        this.updateList();
+      }
     }
   }
 
